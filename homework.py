@@ -39,6 +39,7 @@ HOMEWORK_STATUSES = {
 
 def send_message(bot, message):
     """Отправляем сообщение в телегу, когда изменился статус домашки."""
+    logger.info('Начинаем отправлять сообщение в телегу')
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
     except Exception as error:
@@ -104,13 +105,12 @@ def main():
                 try:
                     status = parse_status(homework)
                     send_message(bot, status)
-                except Exception:
-                    logger.error('nen ytdthyj')
+                except Exception as error:
+                    logger.error(f"Ошибка - {error}")
             else:
                 logger.debug('Ответ от сервера получен. Статус не изменился.')
 
             current_timestamp = int(time.time())
-            time.sleep(RETRY_TIME)
 
         except Exception as error:
             message = f'Сбой в работе программы: {error}'
